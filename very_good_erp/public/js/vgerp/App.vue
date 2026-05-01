@@ -56,7 +56,7 @@ const nav = [
 				<router-link to="/dashboard"
 					style="font-family:'DM Serif Display',Georgia,serif;font-size:15px;
 					       color:#F5DFA0;letter-spacing:-.01em;text-decoration:none;line-height:1.2;">
-					Very Good<br><span style="font-size:13px;opacity:.7;">ERP</span>
+					Ulli Sambar<br><span style="font-size:13px;opacity:.7;">ERP</span>
 				</router-link>
 			</div>
 

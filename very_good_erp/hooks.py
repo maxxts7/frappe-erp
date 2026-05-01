@@ -1,5 +1,5 @@
 app_name = "very_good_erp"
-app_title = "Very Good ERP"
+app_title = "Ulli Sambar ERP"
 app_publisher = "Very Good Company"
 app_description = "A very good ERP application"
 app_email = "manuxtmail@gmail.com"
@@ -15,7 +15,7 @@ app_license = "mit"
 # 	{
 # 		"name": "very_good_erp",
 # 		"logo": "/assets/very_good_erp/logo.png",
-# 		"title": "Very Good ERP",
+# 		"title": "Ulli Sambar ERP",
 # 		"route": "/very_good_erp",
 # 		"has_permission": "very_good_erp.api.permission.has_app_permission"
 # 	}

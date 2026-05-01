@@ -11,4 +11,4 @@ def get_context(context):
 
 	context.no_header = 1
 	context.no_footer = 1
-	context.title = "Very Good ERP"
+	context.title = "Ulli Sambar ERP"
