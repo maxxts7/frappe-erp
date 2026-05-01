@@ -1,0 +1,41 @@
+{% extends "templates/web.html" %}
+
+{% block head_include %}
+<script>
+  tailwind = {
+    config: {
+      theme: {
+        extend: {
+          colors: {
+            sidebar: '#0E1117',
+            parchment: '#F0EDE6',
+            'amber-erp': '#D4961A'
+          },
+          fontFamily: {
+            ui: ['DM Sans', 'system-ui', 'sans-serif'],
+            display: ['DM Serif Display', 'Georgia', 'serif'],
+            mono: ['DM Mono', 'Courier New', 'monospace']
+          }
+        }
+      }
+    }
+  }
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; overflow: hidden; }
+  a { text-decoration: none; }
+</style>
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div id="app" style="height:100vh;overflow:hidden;"></div>
+{% endblock %}
+
+{% block script %}
+{{ include_script('vgerp.bundle.js') }}
+{% endblock %}
