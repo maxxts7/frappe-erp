@@ -1,9 +1,26 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
-const sidebarOpen = ref(true);
+const isMobile = ref(window.innerWidth < 768);
+const sidebarOpen = ref(!isMobile.value);
+
+function onResize() {
+	const mobile = window.innerWidth < 768;
+	if (mobile !== isMobile.value) {
+		isMobile.value = mobile;
+		sidebarOpen.value = !mobile;
+	}
+}
+
+onMounted(() => window.addEventListener("resize", onResize));
+onUnmounted(() => window.removeEventListener("resize", onResize));
+
+// Close sidebar on navigation when mobile
+watch(() => route.path, () => {
+	if (isMobile.value) sidebarOpen.value = false;
+});
 
 const nav = [
 	{
@@ -45,9 +62,18 @@ const nav = [
 <template>
 	<div style="display:flex;height:100vh;overflow:hidden;font-family:'DM Sans',system-ui,sans-serif;">
 
+		<!-- Mobile backdrop -->
+		<div v-if="isMobile && sidebarOpen"
+			@click="sidebarOpen = false"
+			style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10;">
+		</div>
+
 		<!-- Sidebar -->
-		<aside :style="sidebarOpen ? 'width:216px;' : 'width:0;overflow:hidden;'"
-			style="flex-shrink:0;display:flex;flex-direction:column;transition:width .2s ease;
+		<aside
+			:style="isMobile
+				? `position:fixed;top:0;left:0;height:100%;z-index:20;transform:translateX(${sidebarOpen ? '0' : '-100%'});width:260px;`
+				: `width:${sidebarOpen ? '216px' : '0'};overflow:hidden;`"
+			style="flex-shrink:0;display:flex;flex-direction:column;transition:transform .25s ease,width .2s ease;
 			       background:#0E1117;border-right:1px solid #191D27;">
 
 			<!-- Logo bar -->
@@ -58,6 +84,10 @@ const nav = [
 					       color:#F5DFA0;letter-spacing:-.01em;text-decoration:none;line-height:1.2;">
 					Ulli Sambar<br><span style="font-size:13px;opacity:.7;">ERP</span>
 				</router-link>
+				<button v-if="isMobile" @click="sidebarOpen = false"
+					style="background:none;border:none;cursor:pointer;color:#5A6480;font-size:18px;padding:4px;line-height:1;">
+					✕
+				</button>
 			</div>
 
 			<!-- Nav -->
