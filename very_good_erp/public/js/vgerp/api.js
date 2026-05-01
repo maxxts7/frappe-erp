@@ -1,8 +1,7 @@
-const BASE = "/api/v2";
 const csrf = () => window.frappe?.csrf_token || "";
 
 async function req(method, path, params = {}) {
-	const url = new URL(BASE + path, location.origin);
+	const url = new URL("/api/resource" + path, location.origin);
 	const opts = {
 		method,
 		credentials: "include",
@@ -28,14 +27,21 @@ async function req(method, path, params = {}) {
 }
 
 export const getList = (doctype, { fields = ["name"], filters = [], limit = 20, start = 0 } = {}) =>
-	req("GET", `/document/${encodeURIComponent(doctype)}`, {
+	req("GET", `/${encodeURIComponent(doctype)}`, {
 		fields: JSON.stringify(fields),
 		filters: JSON.stringify(filters),
-		limit,
-		start,
+		limit_page_length: limit,
+		limit_start: start,
 	}).then((d) => d.data || d);
 
-export const getCount = (doctype, filters = []) =>
-	req("GET", `/doctype/${encodeURIComponent(doctype)}/count`, {
-		filters: JSON.stringify(filters),
-	}).then((d) => d.data ?? d);
+export const getCount = (doctype, filters = []) => {
+	const url = new URL("/api/method/frappe.client.get_count", location.origin);
+	url.searchParams.set("doctype", doctype);
+	url.searchParams.set("filters", JSON.stringify(filters));
+	return fetch(url, {
+		credentials: "include",
+		headers: { "X-Frappe-CSRF-Token": csrf() },
+	})
+		.then((r) => r.json())
+		.then((d) => d.message ?? 0);
+};
