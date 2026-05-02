@@ -23,7 +23,7 @@ async function load() {
 	try {
 		const filters = search.value ? [["name", "like", `%${search.value}%`]] : [];
 		rows.value = await getList("Purchase Receipt", {
-			fields: ["name", "supplier", "posting_date", "grand_total", "status", "bill_no"],
+			fields: ["name", "supplier", "posting_date", "grand_total", "status"],
 			filters,
 			limit: PAGE_SIZE,
 			start: page.value * PAGE_SIZE,
@@ -64,14 +64,14 @@ onMounted(load);
 			<table style="width:100%;border-collapse:collapse;">
 				<thead>
 					<tr style="background:#F7F4EF;border-bottom:1px solid #E5E0D6;">
-						<th v-for="h in ['Receipt #','Supplier','Date','Amount','Supplier Bill','Status']" :key="h"
+						<th v-for="h in ['Receipt #','Supplier','Date','Amount','Status']" :key="h"
 							style="padding:10px 16px;text-align:left;font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#6B6459;font-weight:500;">{{ h }}</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-if="loading"><td colspan="6" style="padding:32px;text-align:center;color:#9C9086;font-size:13px;">Loading…</td></tr>
-					<tr v-else-if="error"><td colspan="6" style="padding:24px;text-align:center;color:#B91C1C;font-size:13px;">{{ error }}</td></tr>
-					<tr v-else-if="!rows.length"><td colspan="6" style="padding:32px;text-align:center;color:#9C9086;font-size:13px;">No receipts found</td></tr>
+					<tr v-if="loading"><td colspan="5" style="padding:32px;text-align:center;color:#9C9086;font-size:13px;">Loading…</td></tr>
+					<tr v-else-if="error"><td colspan="5" style="padding:24px;text-align:center;color:#B91C1C;font-size:13px;">{{ error }}</td></tr>
+					<tr v-else-if="!rows.length"><td colspan="5" style="padding:32px;text-align:center;color:#9C9086;font-size:13px;">No receipts found</td></tr>
 					<tr v-else v-for="row in rows" :key="row.name" @click="openDoc(row.name)"
 						style="border-bottom:1px solid #F0EDE6;cursor:pointer;transition:background .1s;"
 						onmouseover="this.style.background='#FDFBF7'" onmouseout="this.style.background=''">
@@ -79,7 +79,6 @@ onMounted(load);
 						<td style="padding:10px 16px;color:#3D3530;font-size:13px;">{{ row.supplier }}</td>
 						<td style="padding:10px 16px;color:#6B6459;font-size:13px;font-family:'DM Mono',monospace;">{{ row.posting_date }}</td>
 						<td style="padding:10px 16px;color:#1A1714;font-size:13px;font-family:'DM Mono',monospace;">{{ row.grand_total?.toLocaleString("en-US", { minimumFractionDigits: 2 }) }}</td>
-						<td style="padding:10px 16px;color:#6B6459;font-size:13px;">{{ row.bill_no || "—" }}</td>
 						<td style="padding:10px 16px;">
 							<span style="font-family:'DM Mono',monospace;font-size:10.5px;font-weight:500;letter-spacing:.03em;border-radius:20px;padding:3px 9px;"
 								:style="{ background: (STATUS[row.status]||{bg:'#F5F5F5'}).bg, color: (STATUS[row.status]||{color:'#6B7280'}).color }">
